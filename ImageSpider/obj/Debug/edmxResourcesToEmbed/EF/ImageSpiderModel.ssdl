@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ImageSpiderModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="CatalogTable">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="WebSiteUrl" Type="varchar" MaxLength="255" />
+    <Property Name="CatalogUrl" Type="varchar" MaxLength="255" />
+    <Property Name="Describe" Type="varchar" MaxLength="255" />
+    <Property Name="TotalImages" Type="int" />
+    <Property Name="IsDownLoad" Type="bit" />
+  </EntityType>
+  <EntityType Name="ImageTable">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Guid" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="Alt" Type="varchar" MaxLength="255" />
+    <Property Name="OriginalUrl" Type="varchar" MaxLength="255" />
+    <Property Name="NewUrl" Type="varchar" MaxLength="255" />
+    <Property Name="Width" Type="float" />
+    <Property Name="Height" Type="float" />
+    <Property Name="CatalogId" Type="int" Nullable="false" />
+    <Property Name="WebSiteUrl" Type="varchar" MaxLength="255" />
+    <Property Name="IsDownLoad" Type="bit" />
+    <Property Name="DownLoadTime" Type="datetime" />
+  </EntityType>
+  <Association Name="CatalogId_ForeignKey">
+    <End Role="CatalogTable" Type="Self.CatalogTable" Multiplicity="1" />
+    <End Role="ImageTable" Type="Self.ImageTable" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CatalogTable">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ImageTable">
+        <PropertyRef Name="CatalogId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ImageSpiderModelStoreContainer">
+    <EntitySet Name="CatalogTable" EntityType="Self.CatalogTable" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ImageTable" EntityType="Self.ImageTable" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="CatalogId_ForeignKey" Association="Self.CatalogId_ForeignKey">
+      <End Role="CatalogTable" EntitySet="CatalogTable" />
+      <End Role="ImageTable" EntitySet="ImageTable" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

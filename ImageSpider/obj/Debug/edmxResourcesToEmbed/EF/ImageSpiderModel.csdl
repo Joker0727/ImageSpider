@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ImageSpiderModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="CatalogTable">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="WebSiteUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="CatalogUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="ImageTables" Relationship="Self.CatalogId_ForeignKey" FromRole="CatalogTable" ToRole="ImageTable" />
+    <Property Name="Describe" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="TotalImages" Type="Int32" />
+    <Property Name="IsDownLoad" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="ImageTable">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Guid" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Alt" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="OriginalUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="NewUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="Width" Type="Double" />
+    <Property Name="Height" Type="Double" />
+    <Property Name="CatalogId" Type="Int32" Nullable="false" />
+    <Property Name="WebSiteUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="IsDownLoad" Type="Boolean" />
+    <Property Name="DownLoadTime" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="CatalogTable" Relationship="Self.CatalogId_ForeignKey" FromRole="ImageTable" ToRole="CatalogTable" />
+  </EntityType>
+  <Association Name="CatalogId_ForeignKey">
+    <End Role="CatalogTable" Type="Self.CatalogTable" Multiplicity="1" />
+    <End Role="ImageTable" Type="Self.ImageTable" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CatalogTable">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ImageTable">
+        <PropertyRef Name="CatalogId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ImageSpiderEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="CatalogTables" EntityType="Self.CatalogTable" />
+    <EntitySet Name="ImageTables" EntityType="Self.ImageTable" />
+    <AssociationSet Name="CatalogId_ForeignKey" Association="Self.CatalogId_ForeignKey">
+      <End Role="CatalogTable" EntitySet="CatalogTables" />
+      <End Role="ImageTable" EntitySet="ImageTables" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

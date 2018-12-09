@@ -1,0 +1,15 @@
+C:\Users\Administrator\Desktop\ImageSpider\ImageSpider\bin\Debug\ImageSpider.exe.config
+C:\Users\Administrator\Desktop\ImageSpider\ImageSpider\bin\Debug\ImageSpider.exe
+C:\Users\Administrator\Desktop\ImageSpider\ImageSpider\bin\Debug\ImageSpider.pdb
+C:\Users\Administrator\Desktop\ImageSpider\ImageSpider\obj\Debug\ImageSpider.Form1.resources
+C:\Users\Administrator\Desktop\ImageSpider\ImageSpider\obj\Debug\ImageSpider.Properties.Resources.resources
+C:\Users\Administrator\Desktop\ImageSpider\ImageSpider\obj\Debug\ImageSpider.csproj.GenerateResource.cache
+C:\Users\Administrator\Desktop\ImageSpider\ImageSpider\obj\Debug\ImageSpider.csproj.CoreCompileInputs.cache
+C:\Users\Administrator\Desktop\ImageSpider\ImageSpider\obj\Debug\ImageSpider.exe
+C:\Users\Administrator\Desktop\ImageSpider\ImageSpider\obj\Debug\ImageSpider.pdb
+C:\Users\Administrator\Desktop\ImageSpider\ImageSpider\bin\Debug\EntityFramework.dll
+C:\Users\Administrator\Desktop\ImageSpider\ImageSpider\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Administrator\Desktop\ImageSpider\ImageSpider\bin\Debug\EntityFramework.xml
+C:\Users\Administrator\Desktop\ImageSpider\ImageSpider\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Administrator\Desktop\ImageSpider\ImageSpider\bin\Debug\zh-Hans\EntityFramework.resources.dll
+C:\Users\Administrator\Desktop\ImageSpider\ImageSpider\obj\Debug\ImageSpider.csproj.CopyComplete

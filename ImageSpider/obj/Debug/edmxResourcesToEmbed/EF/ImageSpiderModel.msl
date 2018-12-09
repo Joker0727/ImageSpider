@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ImageSpiderModelStoreContainer" CdmEntityContainer="ImageSpiderEntities">
+    <EntitySetMapping Name="CatalogTables">
+      <EntityTypeMapping TypeName="ImageSpiderModel.CatalogTable">
+        <MappingFragment StoreEntitySet="CatalogTable">
+          <ScalarProperty Name="IsDownLoad" ColumnName="IsDownLoad" />
+          <ScalarProperty Name="TotalImages" ColumnName="TotalImages" />
+          <ScalarProperty Name="Describe" ColumnName="Describe" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="WebSiteUrl" ColumnName="WebSiteUrl" />
+          <ScalarProperty Name="CatalogUrl" ColumnName="CatalogUrl" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ImageTables">
+      <EntityTypeMapping TypeName="ImageSpiderModel.ImageTable">
+        <MappingFragment StoreEntitySet="ImageTable">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Guid" ColumnName="Guid" />
+          <ScalarProperty Name="Alt" ColumnName="Alt" />
+          <ScalarProperty Name="OriginalUrl" ColumnName="OriginalUrl" />
+          <ScalarProperty Name="NewUrl" ColumnName="NewUrl" />
+          <ScalarProperty Name="Width" ColumnName="Width" />
+          <ScalarProperty Name="Height" ColumnName="Height" />
+          <ScalarProperty Name="CatalogId" ColumnName="CatalogId" />
+          <ScalarProperty Name="WebSiteUrl" ColumnName="WebSiteUrl" />
+          <ScalarProperty Name="IsDownLoad" ColumnName="IsDownLoad" />
+          <ScalarProperty Name="DownLoadTime" ColumnName="DownLoadTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

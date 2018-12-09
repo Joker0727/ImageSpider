@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2050
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageSpider", "ImageSpider\ImageSpider.csproj", "{1AF33DFF-FD99-4B59-A143-F8DD9953E0E7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1AF33DFF-FD99-4B59-A143-F8DD9953E0E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AF33DFF-FD99-4B59-A143-F8DD9953E0E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AF33DFF-FD99-4B59-A143-F8DD9953E0E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AF33DFF-FD99-4B59-A143-F8DD9953E0E7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {553EB7F8-073B-445A-A22A-626C16C4A356}
+	EndGlobalSection
+EndGlobal
