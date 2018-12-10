@@ -1,14 +1,16 @@
 ﻿using HtmlAgilityPack;
 using ImageSpider.EF;
 using MyTool;
+using MyTools;
+using OpenQA.Selenium;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Data.Entity;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace ImageSpider.Spider
@@ -16,12 +18,15 @@ namespace ImageSpider.Spider
     public class Mmjpg
     {
         private string mainUrl = "http://www.mmjpg.com/";
+        private string AllURL = "https://www.mzitu.com/all/";
         public ImageSpiderEntities ise = null;
         public HttpHelper hh = null;
         private CookieContainer cookie = new CookieContainer();
         public MyUtils myUtils = null;
         private int TotalPage = 0;
         public string downLoadPath = string.Empty;
+        public SeleniumHelper sel = null;
+
 
         public Mmjpg(string downLoadPath)
         {
@@ -51,7 +56,6 @@ namespace ImageSpider.Spider
                 case 2:
                     {
                         DownLoadImage();
-                        MessageBox.Show("图片下载完成！", "ImageSpider");
                         break;
                     }
                 default:
@@ -138,6 +142,8 @@ namespace ImageSpider.Spider
         /// </summary>
         public void DownLoadImageUrl()
         {
+            sel = new SeleniumHelper(1);
+            sel.driver.Navigate().GoToUrl(mainUrl);
             HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
             ArrayList arrayList = null;
             string imageUrl = mainUrl;
@@ -212,25 +218,41 @@ namespace ImageSpider.Spider
             {
                 s.Id,
                 s.Guid,
-                s.OriginalUrl
+                s.OriginalUrl,
+                s.CatalogId
             }).ToList();
-
+            ArrayList arrayList = hh.GetHtmlData(mainUrl, cookie);
             string imageFullPath = string.Empty;
+            int index = 0;
             foreach (var imgObj in imgUrlList)
             {
+                index++;
+                   CatalogTable catalogTable = ise.CatalogTables.Where(w => w.Id == imgObj.CatalogId).FirstOrDefault();
+                string referer = string.Empty;
+                if (index == 1)
+                    referer = catalogTable.CatalogUrl;
+                else
+                    referer = catalogTable.CatalogUrl+@"/"+ index;
                 try
                 {
                     imageFullPath = downLoadPath + @"\" + imgObj.Guid + ".jpg";
-                    myUtils.DownLoadImage(imgObj.OriginalUrl, imageFullPath, cookie);
+                    byte[] imgByteArr = hh.DowloadCheckImg(imgObj.OriginalUrl, cookie, referer);
+                    Image image = myUtils.GetImageByBytes(imgByteArr);
+                    image.Save(imageFullPath, ImageFormat.Jpeg);
 
                     var imageObj = ise.ImageTables.Where(w => w.Id == imgObj.Id).FirstOrDefault();
                     imageObj.IsDownLoad = true;
+                    imageObj.Width = image.Width;
+                    imageObj.Height = image.Height;
+                    imageObj.NewUrl = imageFullPath;
+                    imageObj.DownLoadTime = DateTime.Now;
                     ise.SaveChanges();
                 }
                 catch (Exception ex)
                 {
                     myUtils.WriteLog($"图片【{imgObj.OriginalUrl}】 下载失败！" + ex);
                 }
+                Thread.Sleep(1000 * 3);
             }
         }
     }

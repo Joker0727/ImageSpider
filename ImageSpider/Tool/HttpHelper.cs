@@ -43,7 +43,7 @@ namespace MyTool
             //request.Referer = refererUrl;
             //request.Proxy = proxyObject; //设置代理
             request.Method = "GET";
-            request.UserAgent = "Mozilla/4.0";
+            request.UserAgent = "Mozilla / 5.0(Windows NT 10.0; Win64; x64) AppleWebKit / 537.36(KHTML, like Gecko) Chrome / 69.0.3497.81 Safari / 537.36";
             request.CookieContainer = cookie;
             request.KeepAlive = true;
 
@@ -90,7 +90,7 @@ namespace MyTool
         /// <param name="Url">验证码URL</param>   
         /// <param name="cookCon">Cookies值</param>   
         /// <param name="savePath">保存位置/文件名</param>   
-        public byte[] DowloadCheckImg(string Url, CookieContainer cookie)
+        public byte[] DowloadCheckImg(string Url, CookieContainer cookie, string referer = null)
         {
             //WebProxy proxyObject = new WebProxy(IP, PORT);// port为端口号 整数型     
             HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(Url);
@@ -100,12 +100,11 @@ namespace MyTool
             webRequest.AllowWriteStreamBuffering = true;
             webRequest.Credentials = CredentialCache.DefaultCredentials;
             webRequest.MaximumResponseHeadersLength = -1;
-            webRequest.Accept = "image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, application/x-shockwave-flash, application/vnd.ms-excel, application/vnd.ms-powerpoint, application/msword, */*";
-            webRequest.UserAgent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; Maxthon; .NET CLR 1.1.4322)";
-            webRequest.ContentType = "application/x-www-form-urlencoded";
+            webRequest.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.81 Safari/537.36";
+            webRequest.ContentType = "image/jpeg";
             webRequest.Method = "GET";
-            webRequest.Headers.Add("Accept-Language", "zh-cn");
-            webRequest.Headers.Add("Accept-Encoding", "gzip,deflate");
+            webRequest.Headers.Add("Accept-Ranges", "bytes");
+            //webRequest.Headers.Add("Accept-Encoding", "gzip,deflate");
             webRequest.KeepAlive = true;
             webRequest.CookieContainer = cookie;
             try
