@@ -19,6 +19,7 @@ namespace ImageSpider.Spider
     {
         private string mainUrl = "http://www.mmjpg.com/";
         private string AllURL = "https://www.mzitu.com/all/";
+        private string Host = "fm.shiyunjj.com";
         public ImageSpiderEntities ise = null;
         public HttpHelper hh = null;
         private CookieContainer cookie = new CookieContainer();
@@ -26,14 +27,18 @@ namespace ImageSpider.Spider
         private int TotalPage = 0;
         public string downLoadPath = string.Empty;
         public SeleniumHelper sel = null;
+        public int ImagesTotalCount = 0;
+        public Label label4 =null;
+        public int currentCount = 0;
 
-
-        public Mmjpg(string downLoadPath)
+        public Mmjpg(string downLoadPath , Label label4)
         {
             ise = new ImageSpiderEntities();
             hh = new HttpHelper();
             myUtils = new MyUtils();
             this.downLoadPath = downLoadPath;
+            this.label4 = label4;
+            GetImagesTotalCount();
         }
 
         public void StartDownLoad(int option)
@@ -51,11 +56,6 @@ namespace ImageSpider.Spider
                     {
                         DownLoadImageUrl();
                         MessageBox.Show("图片链接保存完成！", "ImageSpider");
-                        break;
-                    }
-                case 2:
-                    {
-                        DownLoadImage();
                         break;
                     }
                 default:
@@ -142,8 +142,6 @@ namespace ImageSpider.Spider
         /// </summary>
         public void DownLoadImageUrl()
         {
-            sel = new SeleniumHelper(1);
-            sel.driver.Navigate().GoToUrl(mainUrl);
             HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
             ArrayList arrayList = null;
             string imageUrl = mainUrl;
@@ -161,14 +159,16 @@ namespace ImageSpider.Spider
                 int totalImages = (int)catalog.TotalImages;
                 int fkId = catalog.Id;
 
-
-                string pageUrl = string.Empty, imgUrl = string.Empty, alt = string.Empty;
+                string pageUrl = string.Empty, imgUrl = string.Empty, alt = string.Empty,
+                    referer = string.Empty;
                 for (int i = 1; i < totalImages + 1; i++)
                 {
                     try
                     {
                         if (i == 1)
+                        {
                             pageUrl = catalogUrl;
+                        }
                         else
                             pageUrl = catalogUrl + $"/{i}";
                         arrayList = hh.GetHtmlData(pageUrl, cookie);
@@ -179,6 +179,7 @@ namespace ImageSpider.Spider
                             imgUrl = imgNode.GetAttributeValue("src", "");
                             alt = imgNode.GetAttributeValue("alt", "");
                         }
+
                         ImageTable imageInfo = new ImageTable();
                         imageInfo.Guid = Guid.NewGuid().ToString("N");
                         imageInfo.OriginalUrl = imgUrl;
@@ -191,6 +192,8 @@ namespace ImageSpider.Spider
                         imageInfo.Height = 0;
                         ise.ImageTables.Add(imageInfo);
                         ise.SaveChanges();
+                        referer = catalogUrl + $"/{i + 1}";
+                        DownLoadImage(imageInfo, referer);
                     }
                     catch (Exception e)
                     {
@@ -212,48 +215,51 @@ namespace ImageSpider.Spider
         /// <summary>
         /// 下载图片资源
         /// </summary>
-        public void DownLoadImage()
+        public void DownLoadImage(ImageTable imgObj, string referer)
         {
-            var imgUrlList = ise.ImageTables.Where(w => w.IsDownLoad == false).Select(s => new
-            {
-                s.Id,
-                s.Guid,
-                s.OriginalUrl,
-                s.CatalogId
-            }).ToList();
-            ArrayList arrayList = hh.GetHtmlData(mainUrl, cookie);
             string imageFullPath = string.Empty;
-            int index = 0;
-            foreach (var imgObj in imgUrlList)
+            try
             {
-                index++;
-                   CatalogTable catalogTable = ise.CatalogTables.Where(w => w.Id == imgObj.CatalogId).FirstOrDefault();
-                string referer = string.Empty;
-                if (index == 1)
-                    referer = catalogTable.CatalogUrl;
-                else
-                    referer = catalogTable.CatalogUrl+@"/"+ index;
-                try
-                {
-                    imageFullPath = downLoadPath + @"\" + imgObj.Guid + ".jpg";
-                    byte[] imgByteArr = hh.DowloadCheckImg(imgObj.OriginalUrl, cookie, referer);
-                    Image image = myUtils.GetImageByBytes(imgByteArr);
-                    image.Save(imageFullPath, ImageFormat.Jpeg);
+                imageFullPath = downLoadPath + @"\" + imgObj.Guid + ".jpg";
+                byte[] imgByteArr = hh.DowloadCheckImg(imgObj.OriginalUrl, cookie, Host, referer);
+                Image image = myUtils.GetImageByBytes(imgByteArr);
+                image.Save(imageFullPath, ImageFormat.Jpeg);
 
-                    var imageObj = ise.ImageTables.Where(w => w.Id == imgObj.Id).FirstOrDefault();
+                var imageObj = ise.ImageTables.Where(w => w.Id == imgObj.Id).FirstOrDefault();
+                if (imageObj != null)
+                {
                     imageObj.IsDownLoad = true;
                     imageObj.Width = image.Width;
                     imageObj.Height = image.Height;
                     imageObj.NewUrl = imageFullPath;
                     imageObj.DownLoadTime = DateTime.Now;
                     ise.SaveChanges();
+                    currentCount++;
+                    label4.Invoke(new Action(()=> {
+                        label4.Text = currentCount + "/" + ImagesTotalCount;
+                    }));
                 }
-                catch (Exception ex)
-                {
-                    myUtils.WriteLog($"图片【{imgObj.OriginalUrl}】 下载失败！" + ex);
-                }
-                Thread.Sleep(1000 * 3);
             }
+            catch (Exception ex)
+            {
+                myUtils.WriteLog($"图片【{imgObj.OriginalUrl}】 下载失败！" + ex);
+            }
+            Thread.Sleep(1000 * 3);
         }
+        /// <summary>
+        /// 获取预计的总图片数
+        /// </summary>
+        public void GetImagesTotalCount()
+        {
+            var obj = ise.CatalogTables.Where(w => w.IsDownLoad == false)
+                   .GroupBy(g => new { g.IsDownLoad })
+                   .Select(s => new
+                   {
+                     TotalCount = s.Sum(m=>m.TotalImages)
+                   }).FirstOrDefault();
+            if (obj != null)
+                ImagesTotalCount = int.Parse(obj?.TotalCount.ToString());          
+        }
+
     }
 }

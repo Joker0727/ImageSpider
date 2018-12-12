@@ -1,14 +1,7 @@
 ﻿using ImageSpider.Entity;
 using ImageSpider.Spider;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ImageSpider
@@ -23,7 +16,7 @@ namespace ImageSpider
         private void Form1_Load(object sender, EventArgs e)
         {
             this.MaximizeBox = false;
-            this.comboBox1.SelectedIndex = 0;
+            this.comboBox1.SelectedIndex = 1;
         }
         private void textBox1_Click(object sender, EventArgs e)
         {
@@ -51,7 +44,7 @@ namespace ImageSpider
         public void StartWord(object obj)
         {
             PathOptionModel pathOption = obj as PathOptionModel;
-            Mmjpg mmjpg = new Mmjpg(pathOption.DownLoadPath);
+            Mmjpg mmjpg = new Mmjpg(pathOption.DownLoadPath, this.label4);
             mmjpg.StartDownLoad(pathOption.Option);
         }
     }

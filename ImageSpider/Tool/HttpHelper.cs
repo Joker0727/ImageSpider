@@ -90,23 +90,26 @@ namespace MyTool
         /// <param name="Url">验证码URL</param>   
         /// <param name="cookCon">Cookies值</param>   
         /// <param name="savePath">保存位置/文件名</param>   
-        public byte[] DowloadCheckImg(string Url, CookieContainer cookie, string referer = null)
+        public byte[] DowloadCheckImg(string Url, CookieContainer cookie, string host = null,string referer = null)
         {
             //WebProxy proxyObject = new WebProxy(IP, PORT);// port为端口号 整数型     
             HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(Url);
-            webRequest.Referer = refererUrl;
+            webRequest.Method = "GET";
+            webRequest.Accept = "image/png, image/svg+xml, image/*; q=0.8, */*; q=0.5";
+            webRequest.Headers.Add("Accept-Encoding", "gzip, deflate");
+            webRequest.Headers.Add("Accept-Language", "zh-Hans-CN, zh-Hans; q=0.5");
+            webRequest.KeepAlive = true;
+            webRequest.Host = host;
+            webRequest.Referer = referer;
+            webRequest.ContentType = "image/jpeg";
+            //webRequest.Headers.Add("If-None-Match", "5c00bb5f-6bcu1");
+            webRequest.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36 Edge/17.17134";
             //webRequest.Proxy = proxyObject; //设置代理
             //属性配置   
-            webRequest.AllowWriteStreamBuffering = true;
-            webRequest.Credentials = CredentialCache.DefaultCredentials;
-            webRequest.MaximumResponseHeadersLength = -1;
-            webRequest.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.81 Safari/537.36";
-            webRequest.ContentType = "image/jpeg";
-            webRequest.Method = "GET";
-            webRequest.Headers.Add("Accept-Ranges", "bytes");
-            //webRequest.Headers.Add("Accept-Encoding", "gzip,deflate");
-            webRequest.KeepAlive = true;
-            webRequest.CookieContainer = cookie;
+            //webRequest.AllowWriteStreamBuffering = true;
+            //webRequest.Credentials = CredentialCache.DefaultCredentials;
+            //webRequest.MaximumResponseHeadersLength = -1;         
+            //webRequest.CookieContainer = cookie;
             try
             {
                 //获取服务器返回的资源   
