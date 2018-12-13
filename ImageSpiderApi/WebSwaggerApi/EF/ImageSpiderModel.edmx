@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ImageSpiderModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CatalogTable">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WebSiteUrl" Type="varchar" MaxLength="255" />
+          <Property Name="CatalogUrl" Type="varchar" MaxLength="255" />
+          <Property Name="Describe" Type="varchar" MaxLength="255" />
+          <Property Name="TotalImages" Type="int" />
+          <Property Name="IsDownLoad" Type="bit" />
+        </EntityType>
+        <EntityType Name="ImageTable">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Guid" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Alt" Type="varchar" MaxLength="255" />
+          <Property Name="OriginalUrl" Type="varchar" MaxLength="255" />
+          <Property Name="NewUrl" Type="varchar" MaxLength="255" />
+          <Property Name="Width" Type="float" />
+          <Property Name="Height" Type="float" />
+          <Property Name="CatalogId" Type="int" Nullable="false" />
+          <Property Name="WebSiteUrl" Type="varchar" MaxLength="255" />
+          <Property Name="IsDownLoad" Type="bit" />
+          <Property Name="DownLoadTime" Type="datetime" />
+        </EntityType>
+        <Association Name="CatalogId_ForeignKey">
+          <End Role="CatalogTable" Type="Self.CatalogTable" Multiplicity="1" />
+          <End Role="ImageTable" Type="Self.ImageTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CatalogTable">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ImageTable">
+              <PropertyRef Name="CatalogId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ImageSpiderModelStoreContainer">
+          <EntitySet Name="CatalogTable" EntityType="Self.CatalogTable" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ImageTable" EntityType="Self.ImageTable" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="CatalogId_ForeignKey" Association="Self.CatalogId_ForeignKey">
+            <End Role="CatalogTable" EntitySet="CatalogTable" />
+            <End Role="ImageTable" EntitySet="ImageTable" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ImageSpiderModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="CatalogTable">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WebSiteUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="CatalogUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Describe" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="TotalImages" Type="Int32" />
+          <Property Name="IsDownLoad" Type="Boolean" />
+          <NavigationProperty Name="ImageTables" Relationship="Self.CatalogId_ForeignKey" FromRole="CatalogTable" ToRole="ImageTable" />
+        </EntityType>
+        <EntityType Name="ImageTable">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Guid" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Alt" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="OriginalUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="NewUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Width" Type="Double" />
+          <Property Name="Height" Type="Double" />
+          <Property Name="CatalogId" Type="Int32" Nullable="false" />
+          <Property Name="WebSiteUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="IsDownLoad" Type="Boolean" />
+          <Property Name="DownLoadTime" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="CatalogTable" Relationship="Self.CatalogId_ForeignKey" FromRole="ImageTable" ToRole="CatalogTable" />
+        </EntityType>
+        <Association Name="CatalogId_ForeignKey">
+          <End Role="CatalogTable" Type="Self.CatalogTable" Multiplicity="1" />
+          <End Role="ImageTable" Type="Self.ImageTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CatalogTable">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ImageTable">
+              <PropertyRef Name="CatalogId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ImageSpiderEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CatalogTables" EntityType="Self.CatalogTable" />
+          <EntitySet Name="ImageTables" EntityType="Self.ImageTable" />
+          <AssociationSet Name="CatalogId_ForeignKey" Association="Self.CatalogId_ForeignKey">
+            <End Role="CatalogTable" EntitySet="CatalogTables" />
+            <End Role="ImageTable" EntitySet="ImageTables" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ImageSpiderModelStoreContainer" CdmEntityContainer="ImageSpiderEntities">
+          <EntitySetMapping Name="CatalogTables">
+            <EntityTypeMapping TypeName="ImageSpiderModel.CatalogTable">
+              <MappingFragment StoreEntitySet="CatalogTable">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="WebSiteUrl" ColumnName="WebSiteUrl" />
+                <ScalarProperty Name="CatalogUrl" ColumnName="CatalogUrl" />
+                <ScalarProperty Name="Describe" ColumnName="Describe" />
+                <ScalarProperty Name="TotalImages" ColumnName="TotalImages" />
+                <ScalarProperty Name="IsDownLoad" ColumnName="IsDownLoad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ImageTables">
+            <EntityTypeMapping TypeName="ImageSpiderModel.ImageTable">
+              <MappingFragment StoreEntitySet="ImageTable">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Guid" ColumnName="Guid" />
+                <ScalarProperty Name="Alt" ColumnName="Alt" />
+                <ScalarProperty Name="OriginalUrl" ColumnName="OriginalUrl" />
+                <ScalarProperty Name="NewUrl" ColumnName="NewUrl" />
+                <ScalarProperty Name="Width" ColumnName="Width" />
+                <ScalarProperty Name="Height" ColumnName="Height" />
+                <ScalarProperty Name="CatalogId" ColumnName="CatalogId" />
+                <ScalarProperty Name="WebSiteUrl" ColumnName="WebSiteUrl" />
+                <ScalarProperty Name="IsDownLoad" ColumnName="IsDownLoad" />
+                <ScalarProperty Name="DownLoadTime" ColumnName="DownLoadTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
