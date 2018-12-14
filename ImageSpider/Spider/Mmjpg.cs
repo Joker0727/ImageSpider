@@ -5,6 +5,7 @@ using MyTools;
 using OpenQA.Selenium;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -30,6 +31,7 @@ namespace ImageSpider.Spider
         public int ImagesTotalCount = 0;
         public Label label4 = null;
         public int currentCount = 0;
+        string remotePath = "http://54188.xyz/images/";
 
         public Mmjpg(string downLoadPath, Label label4)
         {
@@ -126,7 +128,7 @@ namespace ImageSpider.Spider
                             }
                             catch (Exception ex)
                             {
-                                myUtils.WriteLog("保存目录连接出错 " + ex);
+                                myUtils.WriteLog("保存目录连接出错  " + catalogUrl);
                             }
                         }
                     }
@@ -138,7 +140,7 @@ namespace ImageSpider.Spider
             }
         }
         /// <summary>
-        /// 下载图片链接
+        /// 下载图片链接和图片资源
         /// </summary>
         public void DownLoadImageUrl()
         {
@@ -197,7 +199,7 @@ namespace ImageSpider.Spider
                     }
                     catch (Exception e)
                     {
-                        myUtils.WriteLog("保存图片链接出错" + e);
+                        myUtils.WriteLog("保存图片链接出错 " + imgUrl);
                     }
                 }
                 try
@@ -221,7 +223,7 @@ namespace ImageSpider.Spider
             try
             {
                 imageFullPath = downLoadPath + @"\" + imgObj.Guid + ".jpg";
-                imageNewUrl = "http://54188.xyz:8080/" + imgObj.Guid + ".jpg";
+                imageNewUrl = remotePath + imgObj.Guid + ".jpg";
                 byte[] imgByteArr = hh.DowloadCheckImg(imgObj.OriginalUrl, cookie, Host, referer);
                 Image image = myUtils.GetImageByBytes(imgByteArr);
                 image.Save(imageFullPath, ImageFormat.Jpeg);
@@ -244,7 +246,7 @@ namespace ImageSpider.Spider
             }
             catch (Exception ex)
             {
-                myUtils.WriteLog($"图片【{imgObj.OriginalUrl}】 下载失败！" + ex);
+                myUtils.WriteLog($"图片【{imgObj.OriginalUrl}】 下载失败！");
             }
             Thread.Sleep(1000 * 3);
         }
@@ -262,6 +264,5 @@ namespace ImageSpider.Spider
             if (obj != null)
                 ImagesTotalCount = int.Parse(obj?.TotalCount.ToString());
         }
-
     }
 }
