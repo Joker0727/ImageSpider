@@ -28,10 +28,10 @@ namespace ImageSpider.Spider
         public string downLoadPath = string.Empty;
         public SeleniumHelper sel = null;
         public int ImagesTotalCount = 0;
-        public Label label4 =null;
+        public Label label4 = null;
         public int currentCount = 0;
 
-        public Mmjpg(string downLoadPath , Label label4)
+        public Mmjpg(string downLoadPath, Label label4)
         {
             ise = new ImageSpiderEntities();
             hh = new HttpHelper();
@@ -217,10 +217,11 @@ namespace ImageSpider.Spider
         /// </summary>
         public void DownLoadImage(ImageTable imgObj, string referer)
         {
-            string imageFullPath = string.Empty;
+            string imageFullPath = string.Empty, imageNewUrl = string.Empty;
             try
             {
                 imageFullPath = downLoadPath + @"\" + imgObj.Guid + ".jpg";
+                imageNewUrl = "http://54188.xyz:8080/" + imgObj.Guid + ".jpg";
                 byte[] imgByteArr = hh.DowloadCheckImg(imgObj.OriginalUrl, cookie, Host, referer);
                 Image image = myUtils.GetImageByBytes(imgByteArr);
                 image.Save(imageFullPath, ImageFormat.Jpeg);
@@ -231,11 +232,12 @@ namespace ImageSpider.Spider
                     imageObj.IsDownLoad = true;
                     imageObj.Width = image.Width;
                     imageObj.Height = image.Height;
-                    imageObj.NewUrl = imageFullPath;
+                    imageObj.NewUrl = imageNewUrl;
                     imageObj.DownLoadTime = DateTime.Now;
                     ise.SaveChanges();
                     currentCount++;
-                    label4.Invoke(new Action(()=> {
+                    label4.Invoke(new Action(() =>
+                    {
                         label4.Text = currentCount + "/" + ImagesTotalCount;
                     }));
                 }
@@ -255,10 +257,10 @@ namespace ImageSpider.Spider
                    .GroupBy(g => new { g.IsDownLoad })
                    .Select(s => new
                    {
-                     TotalCount = s.Sum(m=>m.TotalImages)
+                       TotalCount = s.Sum(m => m.TotalImages)
                    }).FirstOrDefault();
             if (obj != null)
-                ImagesTotalCount = int.Parse(obj?.TotalCount.ToString());          
+                ImagesTotalCount = int.Parse(obj?.TotalCount.ToString());
         }
 
     }
