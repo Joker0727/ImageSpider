@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2de5909714ff4b39bbe1c23ec965e89d" Name="Diagram1">
+        <EntityTypeShape EntityType="ImageSpiderModel.AccessRecord" Width="1.5" PointX="3" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ImageSpiderModel.Account" Width="1.5" PointX="0.75" PointY="3.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ImageSpiderModel.CatalogTable" Width="1.5" PointX="1.5" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ImageSpiderModel.Classification" Width="1.5" PointX="3.75" PointY="16.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ImageSpiderModel.CollectionTable" Width="1.5" PointX="6" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ImageSpiderModel.CommentTable" Width="1.5" PointX="3" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ImageSpiderModel.ImageTable" Width="1.5" PointX="3.75" PointY="11.625" IsExpanded="true" />
+        <AssociationConnector Association="ImageSpiderModel.ForeignKey_AccountId" ManuallyRouted="false" />
+        <AssociationConnector Association="ImageSpiderModel.Fk_AccountId" ManuallyRouted="false" />
+        <AssociationConnector Association="ImageSpiderModel.FK_Comment_AccountId" ManuallyRouted="false" />
+        <AssociationConnector Association="ImageSpiderModel.FK_Type_CatalogId" ManuallyRouted="false" />
+        <AssociationConnector Association="ImageSpiderModel.ForeignKey_CatalogId" ManuallyRouted="false" />
+        <AssociationConnector Association="ImageSpiderModel.ForeignKey_ImageId" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -17,6 +17,7 @@ namespace ImageSpider.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public CatalogTable()
         {
+            this.Classifications = new HashSet<Classification>();
             this.ImageTables = new HashSet<ImageTable>();
         }
     
@@ -27,6 +28,8 @@ namespace ImageSpider.EF
         public Nullable<int> TotalImages { get; set; }
         public Nullable<bool> IsDownLoad { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Classification> Classifications { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ImageTable> ImageTables { get; set; }
     }

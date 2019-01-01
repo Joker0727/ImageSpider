@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ImageSpiderModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="AccessRecord">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OpenId" Type="varchar" MaxLength="255" />
+    <Property Name="NickName" Type="varchar" MaxLength="255" />
+    <Property Name="AccessTime" Type="datetime" />
+    <Property Name="ExitTime" Type="datetime" />
+    <Property Name="StayTime" Type="float" />
+    <Property Name="AccountId" Type="int" />
+  </EntityType>
+  <EntityType Name="Account">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OpenId" Type="varchar" MaxLength="255" />
+    <Property Name="UnionId" Type="varchar" MaxLength="255" />
+    <Property Name="NickName" Type="varchar" MaxLength="255" />
+    <Property Name="Gender" Type="bit" />
+    <Property Name="Country" Type="varchar" MaxLength="255" />
+    <Property Name="Province" Type="varchar" MaxLength="255" />
+    <Property Name="City" Type="varchar" MaxLength="255" />
+    <Property Name="AvatarUrl" Type="varchar" MaxLength="255" />
+    <Property Name="RegistrationTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="CatalogTable">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="WebSiteUrl" Type="varchar" MaxLength="255" />
+    <Property Name="CatalogUrl" Type="varchar" MaxLength="255" />
+    <Property Name="Describe" Type="varchar" MaxLength="255" />
+    <Property Name="TotalImages" Type="int" />
+    <Property Name="IsDownLoad" Type="bit" />
+  </EntityType>
+  <EntityType Name="Classification">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="CatalogId" Type="int" />
+    <Property Name="ClassificationType" Type="varchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="CollectionTable">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AccountId" Type="int" />
+    <Property Name="ImageId" Type="int" />
+    <Property Name="CollectionTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="CommentTable">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="AccountId" Type="int" />
+    <Property Name="NickName" Type="varchar" MaxLength="255" />
+    <Property Name="CommentMessage" Type="text" />
+    <Property Name="CommentaryTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="ImageTable">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Guid" Type="varchar" MaxLength="255" />
+    <Property Name="Alt" Type="varchar" MaxLength="255" />
+    <Property Name="OriginalUrl" Type="varchar" MaxLength="255" />
+    <Property Name="NewUrl" Type="varchar" MaxLength="255" />
+    <Property Name="Width" Type="float" />
+    <Property Name="Height" Type="float" />
+    <Property Name="CatalogId" Type="int" />
+    <Property Name="WebSiteUrl" Type="varchar" MaxLength="255" />
+    <Property Name="IsDownLoad" Type="bit" />
+    <Property Name="DownLoadTime" Type="datetime" />
+  </EntityType>
+  <Association Name="Fk_AccountId">
+    <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+    <End Role="CollectionTable" Type="Self.CollectionTable" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CollectionTable">
+        <PropertyRef Name="AccountId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Comment_AccountId">
+    <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+    <End Role="CommentTable" Type="Self.CommentTable" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CommentTable">
+        <PropertyRef Name="AccountId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Type_CatalogId">
+    <End Role="CatalogTable" Type="Self.CatalogTable" Multiplicity="0..1" />
+    <End Role="Classification" Type="Self.Classification" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CatalogTable">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Classification">
+        <PropertyRef Name="CatalogId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ForeignKey_AccountId">
+    <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+    <End Role="AccessRecord" Type="Self.AccessRecord" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AccessRecord">
+        <PropertyRef Name="AccountId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ForeignKey_CatalogId">
+    <End Role="CatalogTable" Type="Self.CatalogTable" Multiplicity="0..1" />
+    <End Role="ImageTable" Type="Self.ImageTable" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CatalogTable">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ImageTable">
+        <PropertyRef Name="CatalogId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ForeignKey_ImageId">
+    <End Role="ImageTable" Type="Self.ImageTable" Multiplicity="0..1" />
+    <End Role="CollectionTable" Type="Self.CollectionTable" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ImageTable">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CollectionTable">
+        <PropertyRef Name="ImageId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ImageSpiderModelStoreContainer">
+    <EntitySet Name="AccessRecord" EntityType="Self.AccessRecord" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CatalogTable" EntityType="Self.CatalogTable" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Classification" EntityType="Self.Classification" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CollectionTable" EntityType="Self.CollectionTable" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CommentTable" EntityType="Self.CommentTable" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ImageTable" EntityType="Self.ImageTable" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="Fk_AccountId" Association="Self.Fk_AccountId">
+      <End Role="Account" EntitySet="Account" />
+      <End Role="CollectionTable" EntitySet="CollectionTable" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Comment_AccountId" Association="Self.FK_Comment_AccountId">
+      <End Role="Account" EntitySet="Account" />
+      <End Role="CommentTable" EntitySet="CommentTable" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Type_CatalogId" Association="Self.FK_Type_CatalogId">
+      <End Role="CatalogTable" EntitySet="CatalogTable" />
+      <End Role="Classification" EntitySet="Classification" />
+    </AssociationSet>
+    <AssociationSet Name="ForeignKey_AccountId" Association="Self.ForeignKey_AccountId">
+      <End Role="Account" EntitySet="Account" />
+      <End Role="AccessRecord" EntitySet="AccessRecord" />
+    </AssociationSet>
+    <AssociationSet Name="ForeignKey_CatalogId" Association="Self.ForeignKey_CatalogId">
+      <End Role="CatalogTable" EntitySet="CatalogTable" />
+      <End Role="ImageTable" EntitySet="ImageTable" />
+    </AssociationSet>
+    <AssociationSet Name="ForeignKey_ImageId" Association="Self.ForeignKey_ImageId">
+      <End Role="ImageTable" EntitySet="ImageTable" />
+      <End Role="CollectionTable" EntitySet="CollectionTable" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

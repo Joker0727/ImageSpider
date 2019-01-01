@@ -14,6 +14,12 @@ namespace ImageSpider.EF
     
     public partial class ImageTable
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public ImageTable()
+        {
+            this.CollectionTables = new HashSet<CollectionTable>();
+        }
+    
         public int Id { get; set; }
         public string Guid { get; set; }
         public string Alt { get; set; }
@@ -21,11 +27,13 @@ namespace ImageSpider.EF
         public string NewUrl { get; set; }
         public Nullable<double> Width { get; set; }
         public Nullable<double> Height { get; set; }
-        public int CatalogId { get; set; }
+        public Nullable<int> CatalogId { get; set; }
         public string WebSiteUrl { get; set; }
         public Nullable<bool> IsDownLoad { get; set; }
         public Nullable<System.DateTime> DownLoadTime { get; set; }
     
         public virtual CatalogTable CatalogTable { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CollectionTable> CollectionTables { get; set; }
     }
 }

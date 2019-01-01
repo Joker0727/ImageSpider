@@ -199,7 +199,7 @@ namespace ImageSpider.Spider
                     }
                     catch (Exception e)
                     {
-                        myUtils.WriteLog("保存图片链接出错 " + imgUrl);
+                        myUtils.WriteLog("保存图片链接出错 " + e);
                     }
                 }
                 try

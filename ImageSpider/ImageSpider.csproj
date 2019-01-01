@@ -70,26 +70,41 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EF\AccessRecord.cs">
+      <DependentUpon>ImageSpider.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\Account.cs">
+      <DependentUpon>ImageSpider.tt</DependentUpon>
+    </Compile>
     <Compile Include="EF\CatalogTable.cs">
-      <DependentUpon>ImageSpiderModel.tt</DependentUpon>
+      <DependentUpon>ImageSpider.tt</DependentUpon>
     </Compile>
-    <Compile Include="EF\ImageSpiderModel.Context.cs">
+    <Compile Include="EF\Classification.cs">
+      <DependentUpon>ImageSpider.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\CollectionTable.cs">
+      <DependentUpon>ImageSpider.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\CommentTable.cs">
+      <DependentUpon>ImageSpider.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\ImageSpider.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ImageSpiderModel.Context.tt</DependentUpon>
+      <DependentUpon>ImageSpider.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="EF\ImageSpiderModel.cs">
+    <Compile Include="EF\ImageSpider.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ImageSpiderModel.tt</DependentUpon>
+      <DependentUpon>ImageSpider.tt</DependentUpon>
     </Compile>
-    <Compile Include="EF\ImageSpiderModel.Designer.cs">
+    <Compile Include="EF\ImageSpider.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ImageSpiderModel.edmx</DependentUpon>
+      <DependentUpon>ImageSpider.edmx</DependentUpon>
     </Compile>
     <Compile Include="EF\ImageTable.cs">
-      <DependentUpon>ImageSpiderModel.tt</DependentUpon>
+      <DependentUpon>ImageSpider.tt</DependentUpon>
     </Compile>
     <Compile Include="Entity\PathOptionModel.cs" />
     <Compile Include="Form1.cs">
@@ -117,12 +132,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EntityDeploy Include="EF\ImageSpiderModel.edmx">
+    <EntityDeploy Include="EF\ImageSpider.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>ImageSpiderModel.Designer.cs</LastGenOutput>
+      <LastGenOutput>ImageSpider.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="EF\ImageSpiderModel.edmx.diagram">
-      <DependentUpon>ImageSpiderModel.edmx</DependentUpon>
+    <None Include="EF\ImageSpider.edmx.diagram">
+      <DependentUpon>ImageSpider.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -141,15 +156,15 @@
   <ItemGroup>
     <Content Include="bitbug_favico0n.ico" />
     <Content Include="bitbug_favicon.ico" />
-    <Content Include="EF\ImageSpiderModel.Context.tt">
+    <Content Include="EF\ImageSpider.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ImageSpiderModel.Context.cs</LastGenOutput>
-      <DependentUpon>ImageSpiderModel.edmx</DependentUpon>
+      <DependentUpon>ImageSpider.edmx</DependentUpon>
+      <LastGenOutput>ImageSpider.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="EF\ImageSpiderModel.tt">
+    <Content Include="EF\ImageSpider.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ImageSpiderModel.edmx</DependentUpon>
-      <LastGenOutput>ImageSpiderModel.cs</LastGenOutput>
+      <DependentUpon>ImageSpider.edmx</DependentUpon>
+      <LastGenOutput>ImageSpider.cs</LastGenOutput>
     </Content>
     <EmbeddedResource Include="EntityFramework.dll" />
     <EmbeddedResource Include="EntityFramework.SqlServer.dll" />
@@ -158,6 +173,7 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

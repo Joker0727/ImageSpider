@@ -1,0 +1,513 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ImageSpiderModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AccessRecord">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OpenId" Type="varchar" MaxLength="255" />
+          <Property Name="NickName" Type="varchar" MaxLength="255" />
+          <Property Name="AccessTime" Type="datetime" />
+          <Property Name="ExitTime" Type="datetime" />
+          <Property Name="StayTime" Type="float" />
+          <Property Name="AccountId" Type="int" />
+        </EntityType>
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OpenId" Type="varchar" MaxLength="255" />
+          <Property Name="UnionId" Type="varchar" MaxLength="255" />
+          <Property Name="NickName" Type="varchar" MaxLength="255" />
+          <Property Name="Gender" Type="bit" />
+          <Property Name="Country" Type="varchar" MaxLength="255" />
+          <Property Name="Province" Type="varchar" MaxLength="255" />
+          <Property Name="City" Type="varchar" MaxLength="255" />
+          <Property Name="AvatarUrl" Type="varchar" MaxLength="255" />
+          <Property Name="RegistrationTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="CatalogTable">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WebSiteUrl" Type="varchar" MaxLength="255" />
+          <Property Name="CatalogUrl" Type="varchar" MaxLength="255" />
+          <Property Name="Describe" Type="varchar" MaxLength="255" />
+          <Property Name="TotalImages" Type="int" />
+          <Property Name="IsDownLoad" Type="bit" />
+        </EntityType>
+        <EntityType Name="Classification">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="CatalogId" Type="int" />
+          <Property Name="ClassificationType" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="CollectionTable">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AccountId" Type="int" />
+          <Property Name="ImageId" Type="int" />
+          <Property Name="CollectionTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="CommentTable">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="AccountId" Type="int" />
+          <Property Name="NickName" Type="varchar" MaxLength="255" />
+          <Property Name="CommentMessage" Type="text" />
+          <Property Name="CommentaryTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ImageTable">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Guid" Type="varchar" MaxLength="255" />
+          <Property Name="Alt" Type="varchar" MaxLength="255" />
+          <Property Name="OriginalUrl" Type="varchar" MaxLength="255" />
+          <Property Name="NewUrl" Type="varchar" MaxLength="255" />
+          <Property Name="Width" Type="float" />
+          <Property Name="Height" Type="float" />
+          <Property Name="CatalogId" Type="int" />
+          <Property Name="WebSiteUrl" Type="varchar" MaxLength="255" />
+          <Property Name="IsDownLoad" Type="bit" />
+          <Property Name="DownLoadTime" Type="datetime" />
+        </EntityType>
+        <Association Name="Fk_AccountId">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="CollectionTable" Type="Self.CollectionTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CollectionTable">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comment_AccountId">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="CommentTable" Type="Self.CommentTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CommentTable">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Type_CatalogId">
+          <End Role="CatalogTable" Type="Self.CatalogTable" Multiplicity="0..1" />
+          <End Role="Classification" Type="Self.Classification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CatalogTable">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Classification">
+              <PropertyRef Name="CatalogId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ForeignKey_AccountId">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="AccessRecord" Type="Self.AccessRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccessRecord">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ForeignKey_CatalogId">
+          <End Role="CatalogTable" Type="Self.CatalogTable" Multiplicity="0..1" />
+          <End Role="ImageTable" Type="Self.ImageTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CatalogTable">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ImageTable">
+              <PropertyRef Name="CatalogId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ForeignKey_ImageId">
+          <End Role="ImageTable" Type="Self.ImageTable" Multiplicity="0..1" />
+          <End Role="CollectionTable" Type="Self.CollectionTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ImageTable">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CollectionTable">
+              <PropertyRef Name="ImageId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ImageSpiderModelStoreContainer">
+          <EntitySet Name="AccessRecord" EntityType="Self.AccessRecord" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CatalogTable" EntityType="Self.CatalogTable" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Classification" EntityType="Self.Classification" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CollectionTable" EntityType="Self.CollectionTable" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CommentTable" EntityType="Self.CommentTable" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ImageTable" EntityType="Self.ImageTable" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="Fk_AccountId" Association="Self.Fk_AccountId">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="CollectionTable" EntitySet="CollectionTable" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comment_AccountId" Association="Self.FK_Comment_AccountId">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="CommentTable" EntitySet="CommentTable" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Type_CatalogId" Association="Self.FK_Type_CatalogId">
+            <End Role="CatalogTable" EntitySet="CatalogTable" />
+            <End Role="Classification" EntitySet="Classification" />
+          </AssociationSet>
+          <AssociationSet Name="ForeignKey_AccountId" Association="Self.ForeignKey_AccountId">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="AccessRecord" EntitySet="AccessRecord" />
+          </AssociationSet>
+          <AssociationSet Name="ForeignKey_CatalogId" Association="Self.ForeignKey_CatalogId">
+            <End Role="CatalogTable" EntitySet="CatalogTable" />
+            <End Role="ImageTable" EntitySet="ImageTable" />
+          </AssociationSet>
+          <AssociationSet Name="ForeignKey_ImageId" Association="Self.ForeignKey_ImageId">
+            <End Role="ImageTable" EntitySet="ImageTable" />
+            <End Role="CollectionTable" EntitySet="CollectionTable" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ImageSpiderModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AccessRecord">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OpenId" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="NickName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="AccessTime" Type="DateTime" Precision="3" />
+          <Property Name="ExitTime" Type="DateTime" Precision="3" />
+          <Property Name="StayTime" Type="Double" />
+          <Property Name="AccountId" Type="Int32" />
+          <NavigationProperty Name="Account" Relationship="Self.ForeignKey_AccountId" FromRole="AccessRecord" ToRole="Account" />
+        </EntityType>
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OpenId" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="UnionId" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="NickName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Gender" Type="Boolean" />
+          <Property Name="Country" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Province" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="AvatarUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="RegistrationTime" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="AccessRecords" Relationship="Self.ForeignKey_AccountId" FromRole="Account" ToRole="AccessRecord" />
+          <NavigationProperty Name="CollectionTables" Relationship="Self.Fk_AccountId" FromRole="Account" ToRole="CollectionTable" />
+          <NavigationProperty Name="CommentTables" Relationship="Self.FK_Comment_AccountId" FromRole="Account" ToRole="CommentTable" />
+        </EntityType>
+        <EntityType Name="CatalogTable">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WebSiteUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="CatalogUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Describe" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="TotalImages" Type="Int32" />
+          <Property Name="IsDownLoad" Type="Boolean" />
+          <NavigationProperty Name="Classifications" Relationship="Self.FK_Type_CatalogId" FromRole="CatalogTable" ToRole="Classification" />
+          <NavigationProperty Name="ImageTables" Relationship="Self.ForeignKey_CatalogId" FromRole="CatalogTable" ToRole="ImageTable" />
+        </EntityType>
+        <EntityType Name="Classification">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="CatalogId" Type="Int32" />
+          <Property Name="ClassificationType" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CatalogTable" Relationship="Self.FK_Type_CatalogId" FromRole="Classification" ToRole="CatalogTable" />
+        </EntityType>
+        <EntityType Name="CollectionTable">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountId" Type="Int32" />
+          <Property Name="ImageId" Type="Int32" />
+          <Property Name="CollectionTime" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Account" Relationship="Self.Fk_AccountId" FromRole="CollectionTable" ToRole="Account" />
+          <NavigationProperty Name="ImageTable" Relationship="Self.ForeignKey_ImageId" FromRole="CollectionTable" ToRole="ImageTable" />
+        </EntityType>
+        <EntityType Name="CommentTable">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="AccountId" Type="Int32" />
+          <Property Name="NickName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="CommentMessage" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CommentaryTime" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Account" Relationship="Self.FK_Comment_AccountId" FromRole="CommentTable" ToRole="Account" />
+        </EntityType>
+        <EntityType Name="ImageTable">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Guid" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Alt" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="OriginalUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="NewUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Width" Type="Double" />
+          <Property Name="Height" Type="Double" />
+          <Property Name="CatalogId" Type="Int32" />
+          <Property Name="WebSiteUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="IsDownLoad" Type="Boolean" />
+          <Property Name="DownLoadTime" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="CatalogTable" Relationship="Self.ForeignKey_CatalogId" FromRole="ImageTable" ToRole="CatalogTable" />
+          <NavigationProperty Name="CollectionTables" Relationship="Self.ForeignKey_ImageId" FromRole="ImageTable" ToRole="CollectionTable" />
+        </EntityType>
+        <Association Name="ForeignKey_AccountId">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="AccessRecord" Type="Self.AccessRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccessRecord">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Fk_AccountId">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="CollectionTable" Type="Self.CollectionTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CollectionTable">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comment_AccountId">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="CommentTable" Type="Self.CommentTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CommentTable">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Type_CatalogId">
+          <End Role="CatalogTable" Type="Self.CatalogTable" Multiplicity="0..1" />
+          <End Role="Classification" Type="Self.Classification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CatalogTable">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Classification">
+              <PropertyRef Name="CatalogId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ForeignKey_CatalogId">
+          <End Role="CatalogTable" Type="Self.CatalogTable" Multiplicity="0..1" />
+          <End Role="ImageTable" Type="Self.ImageTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CatalogTable">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ImageTable">
+              <PropertyRef Name="CatalogId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ForeignKey_ImageId">
+          <End Role="ImageTable" Type="Self.ImageTable" Multiplicity="0..1" />
+          <End Role="CollectionTable" Type="Self.CollectionTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ImageTable">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CollectionTable">
+              <PropertyRef Name="ImageId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ImageSpiderEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AccessRecords" EntityType="Self.AccessRecord" />
+          <EntitySet Name="Accounts" EntityType="Self.Account" />
+          <EntitySet Name="CatalogTables" EntityType="Self.CatalogTable" />
+          <EntitySet Name="Classifications" EntityType="Self.Classification" />
+          <EntitySet Name="CollectionTables" EntityType="Self.CollectionTable" />
+          <EntitySet Name="CommentTables" EntityType="Self.CommentTable" />
+          <EntitySet Name="ImageTables" EntityType="Self.ImageTable" />
+          <AssociationSet Name="ForeignKey_AccountId" Association="Self.ForeignKey_AccountId">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="AccessRecord" EntitySet="AccessRecords" />
+          </AssociationSet>
+          <AssociationSet Name="Fk_AccountId" Association="Self.Fk_AccountId">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="CollectionTable" EntitySet="CollectionTables" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comment_AccountId" Association="Self.FK_Comment_AccountId">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="CommentTable" EntitySet="CommentTables" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Type_CatalogId" Association="Self.FK_Type_CatalogId">
+            <End Role="CatalogTable" EntitySet="CatalogTables" />
+            <End Role="Classification" EntitySet="Classifications" />
+          </AssociationSet>
+          <AssociationSet Name="ForeignKey_CatalogId" Association="Self.ForeignKey_CatalogId">
+            <End Role="CatalogTable" EntitySet="CatalogTables" />
+            <End Role="ImageTable" EntitySet="ImageTables" />
+          </AssociationSet>
+          <AssociationSet Name="ForeignKey_ImageId" Association="Self.ForeignKey_ImageId">
+            <End Role="ImageTable" EntitySet="ImageTables" />
+            <End Role="CollectionTable" EntitySet="CollectionTables" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ImageSpiderModelStoreContainer" CdmEntityContainer="ImageSpiderEntities">
+          <EntitySetMapping Name="AccessRecords">
+            <EntityTypeMapping TypeName="ImageSpiderModel.AccessRecord">
+              <MappingFragment StoreEntitySet="AccessRecord">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="OpenId" ColumnName="OpenId" />
+                <ScalarProperty Name="NickName" ColumnName="NickName" />
+                <ScalarProperty Name="AccessTime" ColumnName="AccessTime" />
+                <ScalarProperty Name="ExitTime" ColumnName="ExitTime" />
+                <ScalarProperty Name="StayTime" ColumnName="StayTime" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Accounts">
+            <EntityTypeMapping TypeName="ImageSpiderModel.Account">
+              <MappingFragment StoreEntitySet="Account">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="OpenId" ColumnName="OpenId" />
+                <ScalarProperty Name="UnionId" ColumnName="UnionId" />
+                <ScalarProperty Name="NickName" ColumnName="NickName" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Province" ColumnName="Province" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="AvatarUrl" ColumnName="AvatarUrl" />
+                <ScalarProperty Name="RegistrationTime" ColumnName="RegistrationTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CatalogTables">
+            <EntityTypeMapping TypeName="ImageSpiderModel.CatalogTable">
+              <MappingFragment StoreEntitySet="CatalogTable">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="WebSiteUrl" ColumnName="WebSiteUrl" />
+                <ScalarProperty Name="CatalogUrl" ColumnName="CatalogUrl" />
+                <ScalarProperty Name="Describe" ColumnName="Describe" />
+                <ScalarProperty Name="TotalImages" ColumnName="TotalImages" />
+                <ScalarProperty Name="IsDownLoad" ColumnName="IsDownLoad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Classifications">
+            <EntityTypeMapping TypeName="ImageSpiderModel.Classification">
+              <MappingFragment StoreEntitySet="Classification">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CatalogId" ColumnName="CatalogId" />
+                <ScalarProperty Name="ClassificationType" ColumnName="ClassificationType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CollectionTables">
+            <EntityTypeMapping TypeName="ImageSpiderModel.CollectionTable">
+              <MappingFragment StoreEntitySet="CollectionTable">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="ImageId" ColumnName="ImageId" />
+                <ScalarProperty Name="CollectionTime" ColumnName="CollectionTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CommentTables">
+            <EntityTypeMapping TypeName="ImageSpiderModel.CommentTable">
+              <MappingFragment StoreEntitySet="CommentTable">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="NickName" ColumnName="NickName" />
+                <ScalarProperty Name="CommentMessage" ColumnName="CommentMessage" />
+                <ScalarProperty Name="CommentaryTime" ColumnName="CommentaryTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ImageTables">
+            <EntityTypeMapping TypeName="ImageSpiderModel.ImageTable">
+              <MappingFragment StoreEntitySet="ImageTable">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Guid" ColumnName="Guid" />
+                <ScalarProperty Name="Alt" ColumnName="Alt" />
+                <ScalarProperty Name="OriginalUrl" ColumnName="OriginalUrl" />
+                <ScalarProperty Name="NewUrl" ColumnName="NewUrl" />
+                <ScalarProperty Name="Width" ColumnName="Width" />
+                <ScalarProperty Name="Height" ColumnName="Height" />
+                <ScalarProperty Name="CatalogId" ColumnName="CatalogId" />
+                <ScalarProperty Name="WebSiteUrl" ColumnName="WebSiteUrl" />
+                <ScalarProperty Name="IsDownLoad" ColumnName="IsDownLoad" />
+                <ScalarProperty Name="DownLoadTime" ColumnName="DownLoadTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
